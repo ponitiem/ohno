@@ -1,4 +1,5 @@
-# oh no
+# ohno
+# https://github.com/ponitiem/ohno
 
 import random
 import time
@@ -13,10 +14,12 @@ for num in range(1, 51):
 			primeNumbers.append(num)
 
 while True:
-	with open('./.vimrc', 'r') as f:
+	with open('./.vimrc', 'a+') as f:
 		x = [line.strip() for line in f]
 	
 	num = str(primeNumbers[random.randint(0, len(primeNumbers) - 1)])
+	tabstop = None
+	shiftwidth = None
 	
 	iteration = 0
 	for y in x:
@@ -25,6 +28,18 @@ while True:
 		elif y.startswith('set shiftwidth'):
 			shiftwidth = iteration
 		iteration += 1
+	if not tabstop or not shiftwidth:
+		x.append('\n')
+		x.append('// created by ohno')
+		if not tabstop:
+			tabstop = iteration + 2
+			x.append('a')
+		if not shiftwidth:
+			if tabstop:
+				shiftwidth = iteration + 3
+			else:
+				shiftwidth = iteration + 2
+			x.append('a') 
 
 	x[tabstop] = 'set tabstop=' + num
 	x[shiftwidth] = 'set shiftwidth=' + num
